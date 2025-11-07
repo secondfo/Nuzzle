@@ -4,6 +4,10 @@ import StockCard from '../components/StockCard';
 import { CRYPTO_SYMBOLS } from '../config/constants';
 
 const Crypto = ({ darkMode, onSearch, cryptoData, loading }) => {
+  const handleSelect = (symbol) => {
+    onSearch(symbol, 'crypto');
+  };
+
   return (
     <div className="space-y-8">
       <div>
@@ -11,7 +15,7 @@ const Crypto = ({ darkMode, onSearch, cryptoData, loading }) => {
           Cryptocurrency Market
         </h2>
         <SearchBar 
-          onSelect={onSearch} 
+          onSelect={handleSelect} 
           placeholder="Search for crypto (e.g., BTC, ETH)..."
           darkMode={darkMode}
         />

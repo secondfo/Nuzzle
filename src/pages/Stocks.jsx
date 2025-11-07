@@ -4,6 +4,10 @@ import StockCard from '../components/StockCard';
 import { TOP_STOCKS } from '../config/constants';
 
 const Stocks = ({ darkMode, onSearch, stockData, loading }) => {
+  const handleSelect = (symbol) => {
+    onSearch(symbol, 'stock');
+  };
+
   return (
     <div className="space-y-8">
       <div>
@@ -11,7 +15,7 @@ const Stocks = ({ darkMode, onSearch, stockData, loading }) => {
           Stock Market
         </h2>
         <SearchBar 
-          onSelect={onSearch} 
+          onSelect={handleSelect} 
           placeholder="Search for stocks (e.g., AAPL, TSLA)..."
           darkMode={darkMode}
         />

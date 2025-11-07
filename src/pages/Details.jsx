@@ -1,10 +1,21 @@
 import React from 'react';
+import { useParams, useNavigate } from 'react-router-dom';
 
-const Details = ({ symbol, data, loading, darkMode, onBack }) => {
+const Details = ({ stockData, cryptoData, loading, darkMode }) => {
+  const { type, symbol } = useParams();
+  const navigate = useNavigate();
+  
+  const data = type === 'crypto' ? cryptoData[symbol] : stockData[symbol];
+  const isLoading = loading[symbol];
+
+  const handleBack = () => {
+    navigate(-1); //  to previous page
+  };
+
   return (
     <div className="space-y-6">
       <button
-        onClick={onBack}
+        onClick={handleBack}
         className={`flex items-center px-4 py-2 rounded-lg transition-colors ${
           darkMode 
             ? 'bg-gray-800 text-white hover:bg-gray-700' 
@@ -19,7 +30,7 @@ const Details = ({ symbol, data, loading, darkMode, onBack }) => {
           {symbol}
         </h2>
 
-        {loading ? (
+        {isLoading ? (
           <div className="animate-pulse">
             <div className={`h-12 rounded w-48 mb-4 ${darkMode ? 'bg-gray-700' : 'bg-gray-200'}`}></div>
             <div className={`h-6 rounded w-32 ${darkMode ? 'bg-gray-700' : 'bg-gray-200'}`}></div>
@@ -47,7 +58,7 @@ const Details = ({ symbol, data, loading, darkMode, onBack }) => {
                 Market Information
               </h3>
               <p className={darkMode ? 'text-gray-300' : 'text-gray-600'}>
-                Detailed market data and analysis would appear here in a production environment.
+                Detailed market data and analysis for {symbol} would appear here in a production environment.
               </p>
             </div>
           </div>

@@ -1,8 +1,17 @@
+/* eslint-disable no-unused-vars */
 import React from 'react';
 import SearchBar from '../components/SearchBar';
 import NewsCard from '../components/NewsCard';
+import { TOP_STOCKS, CRYPTO_SYMBOLS } from '../config/constants';
 
 const Home = ({ darkMode, onSearch, newsData, loadingNews }) => {
+  const handleSelect = (symbol) => {
+    const isStock = TOP_STOCKS.includes(symbol);
+    const isCrypto = CRYPTO_SYMBOLS.includes(symbol);
+    const type = isCrypto ? 'crypto' : 'stock';
+    onSearch(symbol, type);
+  };
+
   return (
     <div className="space-y-8">
       <div className="text-center">
@@ -13,7 +22,7 @@ const Home = ({ darkMode, onSearch, newsData, loadingNews }) => {
           Track stocks, cryptocurrencies, and stay updated with the latest market news
         </p>
         <SearchBar 
-          onSelect={onSearch} 
+          onSelect={handleSelect} 
           placeholder="Search for any stock or crypto..."
           darkMode={darkMode}
         />
