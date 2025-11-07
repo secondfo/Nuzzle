@@ -1,14 +1,52 @@
-function Home() {
-   return (
-    <div className="min-h-screen flex flex-col items-center justify-center bg-gray-50 text-center">
-      <h1 className="text-4xl font-bold text-blue-600 mb-4">
-        Nuzzle Finance Dashboard
-      </h1>
-      <p className="text-lg text-gray-600 max-w-md">
-        Track real-time market data, crypto trends, and the latest financial news — all in one simple dashboard.
-      </p>
+import React from 'react';
+import SearchBar from '../components/SearchBar';
+import NewsCard from '../components/NewsCard';
+
+const Home = ({ darkMode, onSearch, newsData, loadingNews }) => {
+  return (
+    <div className="space-y-8">
+      <div className="text-center">
+        <h2 className={`text-4xl font-bold mb-4 ${darkMode ? 'text-white' : 'text-gray-900'}`}>
+          Welcome to Nuzzle
+        </h2>
+        <p className={`text-lg mb-8 ${darkMode ? 'text-gray-300' : 'text-gray-600'}`}>
+          Track stocks, cryptocurrencies, and stay updated with the latest market news
+        </p>
+        <SearchBar 
+          onSelect={onSearch} 
+          placeholder="Search for any stock or crypto..."
+          darkMode={darkMode}
+        />
+      </div>
+
+      <div>
+        <h3 className={`text-2xl font-bold mb-6 ${darkMode ? 'text-white' : 'text-gray-900'}`}>
+          Latest Market News
+        </h3>
+        {loadingNews ? (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {[1, 2, 3, 4, 5, 6].map((i) => (
+              <div key={i} className={`rounded-lg shadow-md p-6 animate-pulse ${darkMode ? 'bg-gray-800' : 'bg-white'}`}>
+                <div className={`h-4 rounded w-20 mb-3 ${darkMode ? 'bg-gray-700' : 'bg-gray-200'}`}></div>
+                <div className={`h-6 rounded w-full mb-2 ${darkMode ? 'bg-gray-700' : 'bg-gray-200'}`}></div>
+                <div className={`h-4 rounded w-32 ${darkMode ? 'bg-gray-700' : 'bg-gray-200'}`}></div>
+              </div>
+            ))}
+          </div>
+        ) : newsData.length > 0 ? (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {newsData.map((news) => (
+              <NewsCard key={news.id} news={news} darkMode={darkMode} />
+            ))}
+          </div>
+        ) : (
+          <p className={`text-center ${darkMode ? 'text-gray-400' : 'text-gray-500'}`}>
+            No news available at the moment
+          </p>
+        )}
+      </div>
     </div>
   );
-}
+};
 
 export default Home;
