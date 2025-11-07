@@ -1,9 +1,17 @@
+import axios from 'axios';
+
 export const fetchCryptoFromAPI = async (coinId) => {
   try {
-    const response = await fetch(
-      `https://api.coingecko.com/api/v3/coins/${coinId}?localization=false&tickers=false&community_data=false&developer_data=false`
-    );
-    const data = await response.json();
+    const response = await axios.get(`https://api.coingecko.com/api/v3/coins/${coinId}`, {
+      params: {
+        localization: false,
+        tickers: false,
+        community_data: false,
+        developer_data: false
+      }
+    });
+    
+    const data = response.data;
     
     if (data.market_data) {
       return {

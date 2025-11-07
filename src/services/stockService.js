@@ -1,11 +1,17 @@
+import axios from 'axios';
 import { ALPHA_VANTAGE_KEY } from '../config/constants';
 
 export const fetchStockFromAPI = async (symbol) => {
   try {
-    const response = await fetch(
-      `https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol=${symbol}&apikey=${ALPHA_VANTAGE_KEY}`
-    );
-    const data = await response.json();
+    const response = await axios.get('https://www.alphavantage.co/query', {
+      params: {
+        function: 'GLOBAL_QUOTE',
+        symbol: symbol,
+        apikey: ALPHA_VANTAGE_KEY
+      }
+    });
+    
+    const data = response.data;
     
     if (data['Global Quote'] && Object.keys(data['Global Quote']).length > 0) {
       const quote = data['Global Quote'];
