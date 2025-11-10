@@ -14,9 +14,9 @@ const Home = ({ darkMode, onSearch, newsData, loadingNews }) => {
 
   return (
     <div className="space-y-8">
-      <div className="text-center">
+      <div className="flex flex-col items-center text-center">
         <h2 className={`text-4xl font-bold mb-4 ${darkMode ? 'text-white' : 'text-gray-900'}`}>
-          Welcome to Nuzzle
+          Nuzzle Finance App
         </h2>
         <p className={`text-lg mb-8 ${darkMode ? 'text-gray-300' : 'text-gray-600'}`}>
           Track stocks, cryptocurrencies, and stay updated with the latest market news
