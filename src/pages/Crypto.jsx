@@ -10,7 +10,7 @@ const Crypto = ({ darkMode, onSearch, cryptoData, loading }) => {
 
   return (
     <div className="space-y-8">
-      <div>
+      <div className='flex flex-col items-center'>
         <h2 className={`text-3xl font-bold mb-4 ${darkMode ? 'text-white' : 'text-gray-900'}`}>
           Cryptocurrency Market
         </h2>

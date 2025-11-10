@@ -30,6 +30,7 @@ npm run dev
 - **Vite** - Next generation frontend tooling
 - **Tailwind CSS** - Utility-first styling
 - **Alpha Vantage API** - Real-time market data
+- **CoinGecko API** - Cryptocurrency market data
 - **News API** - Latest financial news
 
 ## 📁 Project Structure
