@@ -1,48 +1,55 @@
 import axios from 'axios';
 import { getTimeAgo } from '../utils/timeUtils';
 
-// Get your free API key from https://newsapi.org/register
-const NEWS_API_KEY = 'e46a0327bc5846e59c15e8f78fe3b93f'; // Replace with your actual key
+const MARKETAUX_API_KEY = import.meta.env.VITE_MARKETAUX_API_KEY;
+
+const TRACKED_SYMBOLS = ['TSLA', 'AAPL', 'MSFT', 'GOOGL', 'AMZN', 'BTC', 'ETH'];
 
 export const fetchNewsFromAPI = async () => {
+  if (!MARKETAUX_API_KEY) {
+    console.warn('Marketaux API key not found. Using fallback news.');
+    return FALLBACK_NEWS;
+  }
+
   try {
-    // Fetch business/finance news
-    const response = await axios.get('https://newsapi.org/v2/everything', {
+    const response = await axios.get('https://api.marketaux.com/v1/news/all', {
       params: {
-        q: 'stock market OR cryptocurrency OR bitcoin OR blockchain',
+        symbols: TRACKED_SYMBOLS.join(','),
+        filter_entities: true,
+        limit: 12,
         language: 'en',
-        sortBy: 'publishedAt',
-        pageSize: 12,
-        apiKey: NEWS_API_KEY
+        api_token: MARKETAUX_API_KEY
       }
     });
     
-    if (response.data.articles) {
-      return response.data.articles.map((article, index) => ({
-        id: article.url || index,
-        title: article.title,
-        source: article.source.name || 'Unknown Source',
-        time: getTimeAgo(article.publishedAt),
-        category: determineCategoryFromArticle(article),
-        url: article.url,
-        image: article.urlToImage
-      }));
+    if (response.data.data) {
+      return response.data.data.map((article, index) => {
+        // Determine category based on entities mentioned
+        const isCrypto = article.entities?.some(entity => 
+          ['BTC', 'ETH', 'cryptocurrency', 'blockchain'].includes(entity.symbol || entity.name)
+        );
+        
+        return {
+          id: article.uuid || index,
+          title: article.title,
+          source: article.source || 'Unknown Source',
+          time: getTimeAgo(article.published_at),
+          category: isCrypto ? 'crypto' : 'stocks',
+          url: article.url,
+          image: article.image_url || '/default-news-image.jpg',
+          snippet: article.description || ''
+        };
+      });
     }
-    return [];
+    
+    console.warn('No news data received. Using fallback news.');
+    return FALLBACK_NEWS;
   } catch (error) {
     console.error('Error fetching news:', error);
-    throw error;
+    return FALLBACK_NEWS;  // Use fallback instead of throwing
   }
 };
 
-// Helper function to determine if article is about crypto or stocks
-const determineCategoryFromArticle = (article) => {
-  const text = `${article.title} ${article.description}`.toLowerCase();
-  const cryptoKeywords = ['bitcoin', 'ethereum', 'crypto', 'blockchain', 'btc', 'eth', 'defi', 'nft'];
-  
-  const isCrypto = cryptoKeywords.some(keyword => text.includes(keyword));
-  return isCrypto ? 'crypto' : 'stocks';
-};
 
 export const FALLBACK_NEWS = [
   { 

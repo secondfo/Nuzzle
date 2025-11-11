@@ -29,9 +29,9 @@ npm run dev
 - **React** - UI Components and state management
 - **Vite** - Next generation frontend tooling
 - **Tailwind CSS** - Utility-first styling
-- **Alpha Vantage API** - Real-time market data
-- **CoinGecko API** - Cryptocurrency market data
-- **News API** - Latest financial news
+- **Alpha Vantage API** - Real-time stock market data
+- **CoinGecko API** - Cryptocurrency market data (used via /coins/:id endpoints)
+- **Marketaux API** - Financial news (HTTPS & deployment-friendly)
 
 ## 📁 Project Structure
 
@@ -115,17 +115,17 @@ export const CRYPTO_SYMBOLS = [
 
 ## 🔑 API Configuration
 
-This project uses two main APIs for market data:
+This project uses three main APIs for market data and news. Below are the exact endpoints and setup steps that match the codebase.
 
 ### Alpha Vantage API (Stocks)
-1. Sign up for a free API key at [Alpha Vantage](https://www.alphavantage.co/)
-2. Create a `.env` file in the root directory
+1. Sign up for a free API key at https://www.alphavantage.co/
+2. Create a `.env` file in the project root (do not commit it)
 3. Add your API key:
    ```env
    VITE_ALPHA_VANTAGE_API_KEY=your_alphavantage_api_key
    ```
 
-Usage example in the code:
+Usage example (stockService):
 ```javascript
 const response = await fetch(
   `https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol=${symbol}&apikey=${import.meta.env.VITE_ALPHA_VANTAGE_API_KEY}`
@@ -133,34 +133,42 @@ const response = await fetch(
 ```
 
 ### CoinGecko API (Crypto)
-The project uses CoinGecko's free API (no key required) for cryptocurrency data.
+The app uses CoinGecko (no API key required) and the implementation in `src/services/cryptoService.js` queries the coin details endpoint.
 
-Usage example in the code:
+Usage example (cryptoService):
 ```javascript
 const response = await fetch(
-  `https://api.coingecko.com/api/v3/simple/price?ids=${id}&vs_currencies=usd&include_24hr_change=true`
+  `https://api.coingecko.com/api/v3/coins/${coinId}?localization=false&tickers=false&community_data=false&developer_data=false`
 );
 ```
 
-### News API
-1. Sign up for a free API key at [News API](https://newsapi.org/)
-2. Add your API key to the `.env` file:
+Note: CoinGecko is free for client-side use but please follow their API rate limits: https://www.coingecko.com/en/api
+
+### Marketaux API (News - deployment friendly)
+Marketaux provides HTTPS endpoints suitable for production and allows filtering by entities/symbols.
+
+1. Sign up at https://www.marketaux.com/ and get your API key
+2. Add the key to `.env`:
    ```env
-   VITE_NEWS_API_KEY=your_newsapi_key
+   VITE_MARKETAUX_API_KEY=your_marketaux_api_key
    ```
 
-Usage example in the code:
+Usage example (newsService):
 ```javascript
 const response = await fetch(
-  `https://newsapi.org/v2/everything?q=finance&apiKey=${import.meta.env.VITE_NEWS_API_KEY}&pageSize=10`
+  `https://api.marketaux.com/v1/news/all?symbols=TSLA,AAPL,MSFT&filter_entities=true&limit=12&language=en&api_token=${import.meta.env.VITE_MARKETAUX_API_KEY}`
 );
 ```
+
+Notes:
+- Keep `.env` out of source control (add it to `.gitignore`).
+- Marketaux supports HTTPS and CORS, so it works in production deployments without a backend proxy.
 
 ## 🙏 Credits
 
 - [Alpha Vantage](https://www.alphavantage.co/) - Real-time stock market data
 - [CoinGecko](https://www.coingecko.com/en/api) - Cryptocurrency market data
-- [News API](https://newsapi.org/) - Financial news integration
+- [Marketaux](https://www.marketaux.com/) - Financial news provider
 - [React](https://reactjs.org/) - UI framework
 - [Vite](https://vitejs.dev/) - Frontend build tool
 - [Tailwind CSS](https://tailwindcss.com/) - Utility-first CSS framework
