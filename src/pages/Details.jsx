@@ -57,9 +57,73 @@ const Details = ({ stockData, cryptoData, loading, darkMode }) => {
               <h3 className={`text-xl font-semibold mb-4 ${darkMode ? 'text-white' : 'text-gray-900'}`}>
                 Market Information
               </h3>
-              <p className={darkMode ? 'text-gray-300' : 'text-gray-600'}>
-                Detailed market data and analysis for {symbol} would appear here in a production environment.
-              </p>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                {/* Stock-specific fields */}
+                {type === 'stock' && (
+                  <>
+                    <div className={darkMode ? 'text-gray-300' : 'text-gray-700'}>
+                      <div className="text-sm text-gray-500">Open</div>
+                      <div className="font-medium">{data.open ? `$${parseFloat(data.open).toFixed(2)}` : '—'}</div>
+                    </div>
+
+                    <div className={darkMode ? 'text-gray-300' : 'text-gray-700'}>
+                      <div className="text-sm text-gray-500">High</div>
+                      <div className="font-medium">{data.high ? `$${parseFloat(data.high).toFixed(2)}` : '—'}</div>
+                    </div>
+
+                    <div className={darkMode ? 'text-gray-300' : 'text-gray-700'}>
+                      <div className="text-sm text-gray-500">Low</div>
+                      <div className="font-medium">{data.low ? `$${parseFloat(data.low).toFixed(2)}` : '—'}</div>
+                    </div>
+
+                    <div className={darkMode ? 'text-gray-300' : 'text-gray-700'}>
+                      <div className="text-sm text-gray-500">Previous Close</div>
+                      <div className="font-medium">{data.previousClose ? `$${parseFloat(data.previousClose).toFixed(2)}` : '—'}</div>
+                    </div>
+
+                    <div className={darkMode ? 'text-gray-300' : 'text-gray-700'}>
+                      <div className="text-sm text-gray-500">Volume</div>
+                      <div className="font-medium">{data.volume ? Number(data.volume).toLocaleString() : '—'}</div>
+                    </div>
+
+                    <div className={darkMode ? 'text-gray-300' : 'text-gray-700'}>
+                      <div className="text-sm text-gray-500">Latest Trading Day</div>
+                      <div className="font-medium">{data.latestTradingDay || '—'}</div>
+                    </div>
+                  </>
+                )}
+
+                {/* Crypto-specific fields */}
+                {type === 'crypto' && (
+                  <>
+                    <div className={darkMode ? 'text-gray-300' : 'text-gray-700'}>
+                      <div className="text-sm text-gray-500">24h High</div>
+                      <div className="font-medium">{data.high24h ? `$${parseFloat(data.high24h).toFixed(2)}` : '—'}</div>
+                    </div>
+
+                    <div className={darkMode ? 'text-gray-300' : 'text-gray-700'}>
+                      <div className="text-sm text-gray-500">24h Low</div>
+                      <div className="font-medium">{data.low24h ? `$${parseFloat(data.low24h).toFixed(2)}` : '—'}</div>
+                    </div>
+
+                    <div className={darkMode ? 'text-gray-300' : 'text-gray-700'}>
+                      <div className="text-sm text-gray-500">Market Cap</div>
+                      <div className="font-medium">{data.marketCap ? `$${Number(data.marketCap).toLocaleString()}` : '—'}</div>
+                    </div>
+
+                    <div className={darkMode ? 'text-gray-300' : 'text-gray-700'}>
+                      <div className="text-sm text-gray-500">24h Volume</div>
+                      <div className="font-medium">{data.totalVolume ? `$${Number(data.totalVolume).toLocaleString()}` : '—'}</div>
+                    </div>
+
+                    <div className={darkMode ? 'text-gray-300' : 'text-gray-700'}>
+                      <div className="text-sm text-gray-500">Circulating Supply</div>
+                      <div className="font-medium">{data.circulatingSupply ? Number(data.circulatingSupply).toLocaleString() : '—'}</div>
+                    </div>
+                  </>
+                )}
+              </div>
             </div>
           </div>
         ) : (

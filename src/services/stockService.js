@@ -18,7 +18,13 @@ export const fetchStockFromAPI = async (symbol) => {
       return {
         price: quote['05. price'],
         change: quote['09. change'],
-        changePercent: quote['10. change percent'].replace('%', '')
+        changePercent: quote['10. change percent'].replace('%', ''),
+        open: quote['02. open'],
+        high: quote['03. high'],
+        low: quote['04. low'],
+        volume: quote['06. volume'],
+        previousClose: quote['08. previous close'],
+        latestTradingDay: quote['07. latest trading day']
       };
     }
     return null;
