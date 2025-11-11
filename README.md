@@ -190,4 +190,4 @@ MIT License - feel free to use this project as a template for your own dashboard
 
 ---
 
-Made with ❤️ by [secondfo](https://github.com/secondfo)
+Made by [secondfo](https://github.com/secondfo)
